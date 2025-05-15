@@ -1,11 +1,9 @@
 #!/bin/bash
 
-# Colors
 GREEN='\033[0;32m'
 RED='\033[0;31m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
-# Handle Ctrl+C (SIGINT)
 trap ctrl_c INT
 
 ctrl_c() {
@@ -13,7 +11,6 @@ ctrl_c() {
     exit 1
 }
 
-# Banner function
 banner() {
     echo -e "${GREEN}"
     echo "███████  ██████  █████  ███    ██"
@@ -24,7 +21,6 @@ banner() {
     echo -e "${NC}"
 }
 
-# Default flag values
 COUNT_ONLY=0
 NUM_IPS=256
 
@@ -35,7 +31,6 @@ usage() {
     exit 1
 }
 
-# Parse command line arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
         --count)
@@ -60,10 +55,8 @@ done
 
 banner
 
-# Get the primary network interface
 interface=$(ip route | grep default | awk '{print $5}')
 
-# Get the subnet base IP (first 3 octets for /24 subnet)
 subnet=$(ip -o -f inet addr show $interface | awk '{print $4}' | cut -d/ -f1 | cut -d. -f1-3)
 
 echo "Scanning subnet: $subnet.0 (up to $NUM_IPS hosts)"
